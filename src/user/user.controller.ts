@@ -16,6 +16,18 @@ export class UserController {
   constructor(private userService: UserService) {}
 
   @Auth()
+  @Put('/favorite-subjects')
+  toggleFavoriteSubject(@User() user: UserModel, @Body('subjectId') subjectId: Types.ObjectId) {
+    return this.userService.toggleFavorite(user, subjectId);
+  }
+
+  @Auth()
+  @Get('/favorite-subjects')
+  getFavoriteSubjects(@User() user: UserModel) {
+    return this.userService.getFavoriteSubjects(user._id);
+  }
+
+  @Auth()
   @Put('/customize')
   customize(@User() user: UserModel, @Body() customizeUserDto: CustomizeUserDto) {
     return this.userService.customize(user._id, customizeUserDto);
@@ -47,6 +59,4 @@ export class UserController {
   ) {
     return this.userService.getAll(searchTerm, userClass, region);
   }
-
-  // todo favorites
 }

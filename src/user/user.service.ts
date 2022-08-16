@@ -62,4 +62,26 @@ export class UserService {
     candidate.password = await hash(changePasswordDto.newPassword, salt);
     return candidate.save();
   }
+
+  async toggleFavorite(user: UserModel, subjectId: Types.ObjectId) {
+    const { favoriteSubjects, _id } = user;
+
+    await this.userModel.findByIdAndUpdate(_id, {
+      favoriteSubjects: favoriteSubjects.includes(subjectId)
+        ? favoriteSubjects.filter((id) => String(id) !== String(subjectId))
+        : [...favoriteSubjects, subjectId],
+    });
+  }
+
+  async getFavoriteSubjects(id: Types.ObjectId) {
+    return this.userModel
+      .findById(id, 'favoriteSubjects')
+      .populate({
+        path: 'favoriteSubjects',
+      })
+      .exec()
+      .then((data) => {
+        return data.favoriteSubjects;
+      });
+  }
 }
