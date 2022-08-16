@@ -1,10 +1,13 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, UnauthorizedException } from '@nestjs/common';
 import { InjectModel } from 'nestjs-typegoose';
 import { UserModel } from './model/user.model';
-import { ModelType } from '@typegoose/typegoose/lib/types';
+import { DocumentType, ModelType } from '@typegoose/typegoose/lib/types';
 import { CreateUserDto } from './dto/create-user.dto';
 import { Types } from 'mongoose';
 import { CustomizeUserDto } from './dto/customize-user.dto';
+import { UpdateUserDto } from './dto/update-user.dto';
+import { ChangePasswordDto } from './dto/change-password.dto';
+import { compare, genSalt, hash } from 'bcryptjs';
 
 @Injectable()
 export class UserService {
@@ -14,8 +17,21 @@ export class UserService {
     return this.userModel.create(createUserDto);
   }
 
-  async getAll() {
-    return this.userModel.find();
+  async getAll(searchTerm = '', userClass?: number, region = ''): Promise<DocumentType<UserModel>[]> {
+    const options: { $or: any[]; $and: any[] } = {
+      $or: [
+        { name: new RegExp(searchTerm, 'i') },
+        { secondName: new RegExp(searchTerm, 'i') },
+        { email: new RegExp(searchTerm, 'i') },
+      ],
+      $and: [{ region: new RegExp(region, 'i') }],
+    };
+
+    if (userClass) {
+      options.$and.push({ class: userClass });
+    }
+
+    return this.userModel.find(options).select('-password -updatedAt -__v').sort({ createdAt: 'desc' }).exec();
   }
 
   async getById(id: Types.ObjectId) {
@@ -26,9 +42,24 @@ export class UserService {
     return this.userModel.findOne({ email });
   }
 
-  async customizeUser(id: Types.ObjectId, customizeUserDto: CustomizeUserDto) {
-    return this.userModel.findByIdAndUpdate(id, customizeUserDto);
+  async customize(id: Types.ObjectId, customizeUserDto: CustomizeUserDto) {
+    return this.userModel.findByIdAndUpdate(id, customizeUserDto, { new: true });
   }
 
-  // TODO create change password and gmail functionality
+  async update(id: Types.ObjectId, updateUserDto: UpdateUserDto) {
+    return this.userModel.findByIdAndUpdate(id, updateUserDto, { new: true });
+  }
+
+  async changePassword(changePasswordDto: ChangePasswordDto) {
+    const candidate = await this.getByEmail(changePasswordDto.email);
+
+    const isValidPassword = await compare(changePasswordDto.currentPassword, candidate.password);
+    if (!isValidPassword) {
+      throw new UnauthorizedException('Неправильні пошта або пароль');
+    }
+
+    const salt = await genSalt(10);
+    candidate.password = await hash(changePasswordDto.newPassword, salt);
+    return candidate.save();
+  }
 }

@@ -36,7 +36,7 @@ export class UserModel extends TimeStamps {
   name: string;
 
   @ApiProperty()
-  @prop()
+  @prop({ default: '' })
   secondName: string;
 
   @ApiProperty()
