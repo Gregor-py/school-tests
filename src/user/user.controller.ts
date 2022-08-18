@@ -1,5 +1,5 @@
 import { Body, Controller, Get, Param, Put, Query } from '@nestjs/common';
-import { ApiTags } from '@nestjs/swagger';
+import { ApiBody, ApiOkResponse, ApiProperty, ApiTags } from '@nestjs/swagger';
 import { Auth } from '../auth/decorators/auth.decorator';
 import { User } from './decorators/user.decorator';
 import { UserModel } from './model/user.model';
@@ -21,6 +21,7 @@ export class UserController {
     return this.userService.toggleFavorite(user, subjectId);
   }
 
+  @ApiOkResponse({ isArray: true, type: UserModel })
   @Auth()
   @Get('/favorite-subjects')
   getFavoriteSubjects(@User() user: UserModel) {
@@ -33,6 +34,7 @@ export class UserController {
     return this.userService.customize(user._id, customizeUserDto);
   }
 
+  @ApiBody({ type: ChangePasswordDto })
   @Put('/change-password')
   changePassword(@Body() changePasswordDto: ChangePasswordDto) {
     return this.userService.changePassword(changePasswordDto);

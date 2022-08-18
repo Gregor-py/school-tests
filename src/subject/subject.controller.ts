@@ -4,7 +4,9 @@ import { SubjectService } from './subject.service';
 import { IdValidationPipe } from '../pipes/id.validation.pipe';
 import { Types } from 'mongoose';
 import { UpdateSubjectDto } from './dto/update-subject.dto';
+import { ApiTags } from '@nestjs/swagger';
 
+@ApiTags('subjects')
 @Controller('subjects')
 export class SubjectController {
   constructor(private subjectService: SubjectService) {}
