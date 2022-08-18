@@ -14,6 +14,10 @@ export class TestModel extends TimeStamps {
   @ApiProperty()
   owner: Ref<UserModel>;
 
+  @prop({ default: 1 })
+  @ApiProperty()
+  class?: number;
+
   @prop()
   @ApiProperty()
   title: string;

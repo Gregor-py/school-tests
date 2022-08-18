@@ -8,8 +8,7 @@ import { AuthModule } from './auth/auth.module';
 import { TestModule } from './test/test.module';
 import { TagModule } from './tag/tag.module';
 import { TaskModule } from './task/task.module';
-import { ColorThemeModule } from './color-theme/color-theme.module';
-import { ColoreThemeService } from './colore-theme/colore-theme.service';
+import { AnswerModule } from './answer/answer.module';
 
 @Module({
   imports: [
@@ -25,9 +24,7 @@ import { ColoreThemeService } from './colore-theme/colore-theme.service';
     TestModule,
     TagModule,
     TaskModule,
-    ColorThemeModule,
+    AnswerModule,
   ],
-  controllers: [],
-  providers: [ColoreThemeService],
 })
 export class AppModule {}

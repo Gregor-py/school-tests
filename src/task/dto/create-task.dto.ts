@@ -1,7 +1,7 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { TaskModel } from '../../task/model/task.model';
+import { TaskModel } from '../model/task.model';
 
-export class AddTaskDto {
+export class CreateTaskDto {
   @ApiProperty()
   newTask: TaskModel;
 }
