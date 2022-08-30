@@ -12,7 +12,7 @@ import { InjectModel } from 'nestjs-typegoose';
 import { TestModel } from '../model/test.model';
 import { ModelType } from '@typegoose/typegoose/lib/types';
 
-export class CreatorGuard implements CanActivate {
+export class CreatorTestGuard implements CanActivate {
   constructor(private reflector: Reflector, @InjectModel(TestModel) private testModel: ModelType<TestModel>) {}
 
   async canActivate(context: ExecutionContext): Promise<boolean> {

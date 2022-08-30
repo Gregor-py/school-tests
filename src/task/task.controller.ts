@@ -1,4 +1,5 @@
-import { Controller } from '@nestjs/common';
+import { Controller, Get } from '@nestjs/common';
+import { Creator } from '../test/decorators/creator.decorator';
 
-@Controller('task')
+@Controller('tasks')
 export class TaskController {}

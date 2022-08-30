@@ -31,7 +31,7 @@ export class TestController {
   }
 
   @Auth()
-  @Creator()
+  @Creator('test')
   @Put('/add-task/:testId')
   addTask(
     @User() user: UserModel,
@@ -42,7 +42,7 @@ export class TestController {
   }
 
   @Auth('admin')
-  @Creator()
+  @Creator('test')
   @Put('/:testId')
   customize(
     @User() user: UserModel,
@@ -53,7 +53,7 @@ export class TestController {
   }
 
   @Auth()
-  @Creator()
+  @Creator('test')
   @Put('/change-subject/:testId')
   changeSubject(
     @User() user: UserModel,
