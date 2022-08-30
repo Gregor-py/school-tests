@@ -52,8 +52,6 @@ export class TestService {
   }
 
   async changeSubject(userId, testId: Types.ObjectId, changeSubjectDto: ChangeSubjectDto) {
-    await this.validateOwnerUser(userId, testId);
-
     return this.testModel.findByIdAndUpdate(testId, { subject: changeSubjectDto.newSubject }, { new: true });
   }
 

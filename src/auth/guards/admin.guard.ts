@@ -10,7 +10,7 @@ export class AdminGuard implements CanActivate {
     const user = request.user;
 
     if (!user.isAdmin) {
-      throw new ForbiddenException('You have no rights');
+      throw new ForbiddenException('У вас немає прав на цю операцію');
     }
 
     return user.isAdmin;

@@ -7,15 +7,16 @@ import { IdValidationPipe } from '../pipes/id.validation.pipe';
 import { Types } from 'mongoose';
 import { CustomizeTestDto } from './dto/customize-test.dto';
 import { ChangeSubjectDto } from './dto/change-subject.dto';
+import { Creator } from './decorators/creator.decorator';
 
 @Controller('tests')
 export class TestController {
   constructor(private testService: TestService) {}
 
   @Auth()
-  @Get('/:id')
-  getById(@Param('id', IdValidationPipe) id: Types.ObjectId) {
-    return this.testService.getById(id);
+  @Get('/:testId')
+  getById(@Param('testId', IdValidationPipe) testId: Types.ObjectId) {
+    return this.testService.getById(testId);
   }
 
   @Get()
@@ -30,30 +31,31 @@ export class TestController {
   }
 
   @Auth()
-  @Put('/add-task/:id')
+  @Put('/add-task/:testId')
   addTask(
     @User() user: UserModel,
-    @Param('id', IdValidationPipe) id: Types.ObjectId,
+    @Param('testId', IdValidationPipe) testId: Types.ObjectId,
     @Body('taskType') taskType: string,
   ) {
-    return this.testService.addTask(user._id, id, taskType);
+    return this.testService.addTask(user._id, testId, taskType);
   }
 
   @Auth()
-  @Put('/:id')
+  @Put('/:testId')
   customize(
     @User() user: UserModel,
-    @Param('id', IdValidationPipe) testId,
+    @Param('testId', IdValidationPipe) testId,
     @Body() customizeTestDto: CustomizeTestDto,
   ) {
     return this.testService.customize(user._id, testId, customizeTestDto);
   }
 
+  @Creator()
   @Auth()
-  @Put('/change-subject/:id')
+  @Put('/change-subject/:testId')
   changeSubject(
     @User() user: UserModel,
-    @Param('id', IdValidationPipe) testId,
+    @Param('testId', IdValidationPipe) testId,
     @Body() changeSubjectDto: ChangeSubjectDto,
   ) {
     return this.testService.changeSubject(user._id, testId, changeSubjectDto);
