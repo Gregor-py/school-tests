@@ -24,7 +24,7 @@ export class CreatorGuard implements CanActivate {
       throw new UnauthorizedException('Ви не зареєстровані');
     }
 
-    const changingTest = await this.testModel.findById(testId);
+    const changingTest = await this.testModel.findById(testId).lean().exec();
     if (!changingTest) {
       throw new BadRequestException('Такого теста не існує');
     }

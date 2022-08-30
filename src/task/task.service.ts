@@ -4,13 +4,15 @@ import { TaskModel } from './model/task.model';
 import { ModelType } from '@typegoose/typegoose/lib/types';
 import { TaskTypesEnum } from './model/task.enum';
 import { TaskManyFromMany, TaskNumberAnswer, TaskOneFromMany, TaskWrittenAnswer } from './task.interface';
+import { Types } from 'mongoose';
 
 @Injectable()
 export class TaskService {
   constructor(@InjectModel(TaskModel) private taskModel: ModelType<TaskModel>) {}
 
-  async create(variantType: string) {
+  async create(variantType: string, userId: Types.ObjectId) {
     const defaultTask = {
+      owner: userId,
       type: variantType,
       taskData: null,
     };

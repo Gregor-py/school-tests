@@ -31,6 +31,7 @@ export class TestController {
   }
 
   @Auth()
+  @Creator()
   @Put('/add-task/:testId')
   addTask(
     @User() user: UserModel,
@@ -40,7 +41,8 @@ export class TestController {
     return this.testService.addTask(user._id, testId, taskType);
   }
 
-  @Auth()
+  @Auth('admin')
+  @Creator()
   @Put('/:testId')
   customize(
     @User() user: UserModel,
@@ -50,8 +52,8 @@ export class TestController {
     return this.testService.customize(user._id, testId, customizeTestDto);
   }
 
-  @Creator()
   @Auth()
+  @Creator()
   @Put('/change-subject/:testId')
   changeSubject(
     @User() user: UserModel,

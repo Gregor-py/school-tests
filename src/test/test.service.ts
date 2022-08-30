@@ -32,7 +32,12 @@ export class TestService {
       options.$and.push({ subject: subject });
     }
 
-    return this.testModel.find(options).select('-updatedAt -__v').sort({ createdAt: 'desc' }).exec();
+    return this.testModel
+      .find(options)
+      .select('-updatedAt -__v')
+      .sort({ createdAt: 'desc' })
+      .populate('subject')
+      .exec();
   }
 
   async create(userId: Types.ObjectId) {
@@ -46,8 +51,6 @@ export class TestService {
   }
 
   async customize(userId: Types.ObjectId, testId: Types.ObjectId, customizeTestDto: CustomizeTestDto) {
-    await this.validateOwnerUser(userId, testId);
-
     return this.testModel.findByIdAndUpdate(testId, customizeTestDto, { new: true });
   }
 
@@ -56,24 +59,10 @@ export class TestService {
   }
 
   async addTask(userId: Types.ObjectId, testId: Types.ObjectId, variantType: string) {
-    const test = await this.validateOwnerUser(userId, testId);
-    const createdTask = await this.taskService.create(variantType);
+    const test = await this.testModel.findById(testId);
+    const createdTask = await this.taskService.create(variantType, userId);
 
     test.tasks.push(createdTask._id);
     return test.save();
-  }
-
-  private async validateOwnerUser(userId: Types.ObjectId, testId: Types.ObjectId) {
-    const test = this.testModel.findById(testId);
-
-    if (!test) {
-      throw new BadRequestException('Теста з таким ідентифікатором не існує');
-    }
-
-    if (test.owner !== userId) {
-      throw new ForbiddenException('Редагувати тест може лише творець');
-    }
-
-    return test;
   }
 }
