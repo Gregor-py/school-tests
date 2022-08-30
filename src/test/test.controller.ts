@@ -41,7 +41,7 @@ export class TestController {
     return this.testService.addTask(user._id, testId, taskType);
   }
 
-  @Auth('admin')
+  @Auth()
   @Creator('test')
   @Put('/:testId')
   customize(
