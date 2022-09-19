@@ -3,13 +3,53 @@ import { InjectModel } from 'nestjs-typegoose';
 import { TaskModel } from './model/task.model';
 import { ModelType } from '@typegoose/typegoose/lib/types';
 import { TaskTypesEnum } from './model/task.enum';
-import { TaskManyFromMany, TaskNumberAnswer, TaskOneFromMany, TaskWrittenAnswer } from './task.interface';
 import { Types } from 'mongoose';
 import { ChangeCorrectAnswerDto } from './dto/change-correct-answer.dto';
+import { AnswerService } from '../answer/answer.service';
 
 @Injectable()
 export class TaskService {
-  constructor(@InjectModel(TaskModel) private taskModel: ModelType<TaskModel>) {}
+  constructor(@InjectModel(TaskModel) private taskModel: ModelType<TaskModel>, private answerService: AnswerService) {}
+
+  async addAnswer(taskId: Types.ObjectId, userId: Types.ObjectId) {
+    const createdAnswer = await this.answerService.create(userId);
+    const changingTask = await this.taskModel.findById(taskId);
+
+    this.validateTaskWithProbablyAnswers(changingTask);
+
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+    // @ts-ignore
+    const newAnswerVariants = [...changingTask.taskData.answerVariants, createdAnswer._id];
+
+    const newTaskData = {
+      ...changingTask.taskData,
+      answerVariants: newAnswerVariants,
+    };
+
+    return this.taskModel.findByIdAndUpdate(taskId, { taskData: newTaskData });
+  }
+
+  async deleteAnswer(answerId: Types.ObjectId, taskId: Types.ObjectId) {
+    const changingTask = await this.taskModel.findById(taskId);
+    this.validateTaskWithProbablyAnswers(changingTask);
+
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+    // @ts-ignore
+    console.log(changingTask.taskData.answerVariants);
+
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+    // @ts-ignore
+    const newAnswerVariants = changingTask.taskData.answerVariants.filter(
+      (answerVariant) => String(answerVariant) !== String(answerId),
+    );
+    const newTaskData = {
+      ...changingTask.taskData,
+      answerVariants: newAnswerVariants,
+    };
+
+    await this.answerService.deleteAnswer(answerId);
+    return this.taskModel.findByIdAndUpdate(taskId, { taskData: newTaskData });
+  }
 
   async getById(taskId: Types.ObjectId) {
     return this.taskModel.findById(taskId);
@@ -86,6 +126,12 @@ export class TaskService {
       return {
         correctAnswer: '',
       };
+    }
+  }
+
+  private validateTaskWithProbablyAnswers(task: TaskModel) {
+    if (task.type !== TaskTypesEnum.TaskManyFromMany && task.type !== TaskTypesEnum.TaskOneFromMany) {
+      throw new BadRequestException('Для такого типу завдання не можна додати варіант відповіді');
     }
   }
 }

@@ -3,6 +3,7 @@ import { TaskService } from './task.service';
 import { TaskController } from './task.controller';
 import { TypegooseModule } from 'nestjs-typegoose';
 import { TaskModel } from './model/task.model';
+import { AnswerModule } from '../answer/answer.module';
 
 @Module({
   providers: [TaskService],
@@ -16,6 +17,7 @@ import { TaskModel } from './model/task.model';
         },
       },
     ]),
+    AnswerModule,
   ],
   exports: [TaskService],
 })
