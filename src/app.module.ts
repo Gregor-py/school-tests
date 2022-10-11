@@ -9,6 +9,8 @@ import { TestModule } from './test/test.module';
 import { TagModule } from './tag/tag.module';
 import { TaskModule } from './task/task.module';
 import { AnswerModule } from './answer/answer.module';
+import { PassingTestModule } from './passing-test/passing-test.module';
+import { PassedTaskModule } from './passed-task/passed-task.module';
 
 @Module({
   imports: [
@@ -25,6 +27,8 @@ import { AnswerModule } from './answer/answer.module';
     TagModule,
     TaskModule,
     AnswerModule,
+    PassingTestModule,
+    PassedTaskModule,
   ],
 })
 export class AppModule {}
