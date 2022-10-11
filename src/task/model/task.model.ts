@@ -1,9 +1,8 @@
 import { prop, Ref } from '@typegoose/typegoose';
 import { Base, TimeStamps } from '@typegoose/typegoose/lib/defaultClasses';
 import { ApiProperty, ApiTags } from '@nestjs/swagger';
-import { TaskTypesEnum } from './task.enum';
-import { TaskType } from '../task.interface';
 import { UserModel } from '../../user/model/user.model';
+import { AnswerModel } from '../../answer/model/answer.model';
 
 export interface TaskModel extends Base {}
 
@@ -17,11 +16,9 @@ export class TaskModel extends TimeStamps {
   @ApiProperty()
   question: string;
 
-  @prop({ enum: TaskTypesEnum })
-  @ApiProperty()
-  type: string;
+  @prop({ ref: () => AnswerModel })
+  answerVariants: Ref<AnswerModel>[];
 
-  @prop()
-  @ApiProperty()
-  taskData: TaskType;
+  @prop({ ref: () => AnswerModel })
+  correctAnswer: Ref<AnswerModel>;
 }

@@ -58,9 +58,9 @@ export class TestService {
     return this.testModel.findByIdAndUpdate(testId, { subject: changeSubjectDto.newSubject }, { new: true });
   }
 
-  async addTask(userId: Types.ObjectId, testId: Types.ObjectId, variantType: string) {
+  async addTask(userId: Types.ObjectId, testId: Types.ObjectId) {
     const test = await this.testModel.findById(testId);
-    const createdTask = await this.taskService.create(variantType, userId);
+    const createdTask = await this.taskService.create(userId);
 
     test.tasks.push(createdTask._id);
     return test.save();

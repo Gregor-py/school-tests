@@ -29,13 +29,6 @@ export class TaskController {
 
   @Auth()
   @Creator('task')
-  @Put('/type/:taskId')
-  changeTaskType(@Param('taskId', IdValidationPipe) taskId, @Body() changeTaskTypeDto: ChangeTaskTypeDto) {
-    return this.taskService.changeTaskType(changeTaskTypeDto.newTaskType, taskId);
-  }
-
-  @Auth()
-  @Creator('task')
   @Put('/correct-answer/:taskId')
   changeCorrectAnswer(
     @Param('taskId', IdValidationPipe) taskId,

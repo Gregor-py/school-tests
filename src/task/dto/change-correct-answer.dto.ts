@@ -7,14 +7,4 @@ export class ChangeCorrectAnswerDto {
   @IsOptional()
   @IsString({ message: 'Має бути рядковий тип' })
   readonly newCorrectAnswerId: Types.ObjectId;
-
-  @ApiProperty({ required: false })
-  @IsOptional()
-  @IsString({ message: 'Має бути рядковий тип' })
-  readonly newCorrectAnswerString: string;
-
-  @ApiProperty({ required: false })
-  @IsOptional()
-  @IsNumber({}, { message: 'Має бути чисовий тип' })
-  readonly newCorrectAnswerNumber: number;
 }

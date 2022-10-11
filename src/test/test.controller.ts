@@ -33,12 +33,8 @@ export class TestController {
   @Auth()
   @Creator('test')
   @Put('/add-task/:testId')
-  addTask(
-    @User() user: UserModel,
-    @Param('testId', IdValidationPipe) testId: Types.ObjectId,
-    @Body('taskType') taskType: string,
-  ) {
-    return this.testService.addTask(user._id, testId, taskType);
+  addTask(@User() user: UserModel, @Param('testId', IdValidationPipe) testId: Types.ObjectId) {
+    return this.testService.addTask(user._id, testId);
   }
 
   @Auth()
