@@ -19,5 +19,6 @@ import { TaskModule } from '../task/task.module';
       },
     ]),
   ],
+  exports: [TestService],
 })
 export class TestModule {}

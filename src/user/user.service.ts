@@ -1,4 +1,4 @@
-import { Injectable, UnauthorizedException } from '@nestjs/common';
+import { BadRequestException, Injectable, UnauthorizedException } from '@nestjs/common';
 import { InjectModel } from 'nestjs-typegoose';
 import { UserModel } from './model/user.model';
 import { DocumentType, ModelType } from '@typegoose/typegoose/lib/types';
@@ -83,5 +83,20 @@ export class UserService {
       .then((data) => {
         return data.favoriteSubjects;
       });
+  }
+
+  async addToStartedTests(startedTest: Types.ObjectId, userId: Types.ObjectId) {
+    const user = await this.userModel.findById(userId);
+    if (!user) {
+      throw new BadRequestException('Такого користувача неіснує');
+    }
+
+    if (!user.startedTests) {
+      user.startedTests = [];
+    }
+    user.startedTests.push(startedTest);
+    await user.save();
+
+    return startedTest;
   }
 }

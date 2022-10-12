@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { BadRequestException, Injectable } from '@nestjs/common';
 import { Types } from 'mongoose';
 import { InjectModel } from 'nestjs-typegoose';
 import { TestModel } from './model/test.model';
@@ -10,6 +10,15 @@ import { TaskService } from '../task/task.service';
 @Injectable()
 export class TestService {
   constructor(@InjectModel(TestModel) private testModel: ModelType<TestModel>, private taskService: TaskService) {}
+
+  async getTasks(testId: Types.ObjectId) {
+    const test = await this.testModel.findById(testId);
+    if (!test) {
+      throw new BadRequestException('Тест не знайдено');
+    }
+
+    return test.tasks;
+  }
 
   async getById(id: Types.ObjectId) {
     return this.testModel.findById(id).populate('subject');

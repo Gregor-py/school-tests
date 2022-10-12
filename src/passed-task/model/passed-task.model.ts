@@ -2,6 +2,7 @@ import { prop, Ref } from '@typegoose/typegoose';
 import { Base, TimeStamps } from '@typegoose/typegoose/lib/defaultClasses';
 import { ApiProperty, ApiTags } from '@nestjs/swagger';
 import { TaskModel } from '../../task/model/task.model';
+import { Types } from 'mongoose';
 
 export interface PassedTaskModel extends Base {}
 
@@ -13,5 +14,5 @@ export class PassedTaskModel extends TimeStamps {
 
   @prop()
   @ApiProperty()
-  answer: number;
+  chosenAnswer: Types.ObjectId;
 }

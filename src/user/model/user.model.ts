@@ -3,6 +3,7 @@ import { Base, TimeStamps } from '@typegoose/typegoose/lib/defaultClasses';
 import { RegionEnum } from './region.enum';
 import { SubjectModel } from '../../subject/model/subject.model';
 import { ApiProperty, ApiTags } from '@nestjs/swagger';
+import { PassingTestModel } from '../../passing-test/model/passing-test.model';
 
 export interface UserModel extends Base {}
 
@@ -43,4 +44,8 @@ export class UserModel extends TimeStamps {
   @prop({ default: [], ref: () => SubjectModel })
   @ApiProperty()
   favoriteSubjects?: Ref<SubjectModel>[];
+
+  @prop({ default: [], ref: () => PassingTestModel })
+  @ApiProperty()
+  startedTests: Ref<PassingTestModel>[];
 }
