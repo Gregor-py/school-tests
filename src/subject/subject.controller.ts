@@ -11,10 +11,14 @@ import { ApiTags } from '@nestjs/swagger';
 export class SubjectController {
   constructor(private subjectService: SubjectService) {}
 
-  @Auth('admin')
   @Get()
   getAll(@Query('searchTerm') searchTerm?: string) {
     return this.subjectService.getAll(searchTerm);
+  }
+
+  @Get('/popular')
+  getPopular() {
+    return this.subjectService.getPopular();
   }
 
   @Auth('admin')

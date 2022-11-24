@@ -7,7 +7,7 @@ import { Types } from 'mongoose';
 
 @Injectable()
 export class SubjectService {
-  constructor(@InjectModel(SubjectModel) private subjectModel: ModelType<SubjectModel>) {}
+  constructor(@InjectModel(SubjectModel) private subjectModel: ModelType<SubjectModel>) { }
 
   async getAll(searchTerm = '') {
     const options = {
@@ -35,6 +35,15 @@ export class SubjectService {
     }
 
     return subject;
+  }
+
+  async getPopular() {
+    return this.subjectModel
+      .aggregate()
+      .lookup({ from: 'Test', foreignField: 'subject', localField: '_id', as: 'tests' })
+      .addFields({ countTests: { $size: '$tests' } })
+      .sort({ countTests: -1 })
+      .exec()
   }
 
   async create() {

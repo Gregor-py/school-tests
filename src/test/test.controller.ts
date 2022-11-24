@@ -8,7 +8,9 @@ import { Types } from 'mongoose';
 import { CustomizeTestDto } from './dto/customize-test.dto';
 import { ChangeSubjectDto } from './dto/change-subject.dto';
 import { Creator } from './decorators/creator.decorator';
+import { ApiTags } from '@nestjs/swagger';
 
+@ApiTags('tests')
 @Controller('tests')
 export class TestController {
   constructor(private testService: TestService) {}
