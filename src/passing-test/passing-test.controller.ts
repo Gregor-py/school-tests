@@ -7,6 +7,7 @@ import { Types } from 'mongoose';
 import { AddPassedTaskDto } from './dto/add-passed-task.dto';
 import { IdValidationPipe } from '../pipes/id.validation.pipe';
 
+@ApiTags('passing-test')
 @Controller('passing-test')
 export class PassingTestController {
   constructor(private passingTestService: PassingTestService) {}

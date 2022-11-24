@@ -10,6 +10,7 @@ import { User } from '../user/decorators/user.decorator';
 import { UserModel } from '../user/model/user.model';
 import { Types } from 'mongoose';
 
+@ApiTags('tasks')
 @Controller('tasks')
 export class TaskController {
   constructor(private taskService: TaskService) {}

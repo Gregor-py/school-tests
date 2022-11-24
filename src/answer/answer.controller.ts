@@ -7,7 +7,9 @@ import { ChangeAnswerTextDto } from './dto/change-answer-text.dto';
 import { Types } from 'mongoose';
 import { User } from '../user/decorators/user.decorator';
 import { UserModel } from '../user/model/user.model';
+import { ApiTags } from '@nestjs/swagger';
 
+@ApiTags('answers')
 @Controller('answers')
 export class AnswerController {
   constructor(private answerService: AnswerService) {}
