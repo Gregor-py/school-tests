@@ -9,6 +9,7 @@ import { ChangeCorrectAnswerDto } from './dto/change-correct-answer.dto';
 import { User } from '../user/decorators/user.decorator';
 import { UserModel } from '../user/model/user.model';
 import { Types } from 'mongoose';
+import { ApiTags } from '@nestjs/swagger';
 
 @ApiTags('tasks')
 @Controller('tasks')

@@ -6,6 +6,7 @@ import { PassingTestService } from './passing-test.service';
 import { Types } from 'mongoose';
 import { AddPassedTaskDto } from './dto/add-passed-task.dto';
 import { IdValidationPipe } from '../pipes/id.validation.pipe';
+import { ApiTags } from '@nestjs/swagger';
 
 @ApiTags('passing-test')
 @Controller('passing-test')
