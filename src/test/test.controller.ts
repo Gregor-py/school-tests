@@ -16,6 +16,12 @@ export class TestController {
   constructor(private testService: TestService) {}
 
   @Auth()
+  @Get('/created')
+  getCreated(@User() user: UserModel) {
+    return this.testService.getCreatedTestsByUser(user._id);
+  }
+
+  @Auth()
   @Get('/:testId')
   getById(@Param('testId', IdValidationPipe) testId: Types.ObjectId) {
     return this.testService.getById(testId);

@@ -15,7 +15,8 @@ import { SubjectModel } from './model/subject.model';
       },
     ]),
   ],
+  exports: [SubjectService],
   providers: [SubjectService],
   controllers: [SubjectController],
 })
-export class SubjectModule {}
+export class SubjectModule { }

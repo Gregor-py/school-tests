@@ -6,10 +6,19 @@ import { ModelType } from '@typegoose/typegoose/lib/types';
 import { CustomizeTestDto } from './dto/customize-test.dto';
 import { ChangeSubjectDto } from './dto/change-subject.dto';
 import { TaskService } from '../task/task.service';
+import { SubjectService } from 'src/subject/subject.service';
 
 @Injectable()
 export class TestService {
-  constructor(@InjectModel(TestModel) private testModel: ModelType<TestModel>, private taskService: TaskService) {}
+  constructor(
+    @InjectModel(TestModel) private testModel: ModelType<TestModel>,
+    private taskService: TaskService,
+    private subjectService: SubjectService,
+  ) {}
+
+  async getCreatedTestsByUser(userId: any) {
+    return this.testModel.find({ owner: userId });
+  }
 
   async getTasks(testId: Types.ObjectId) {
     const test = await this.testModel.findById(testId);
@@ -50,11 +59,18 @@ export class TestService {
   }
 
   async create(userId: Types.ObjectId) {
+    const subject = await this.subjectService.getAll();
+
     const defaultTestData = {
       owner: userId,
       title: '',
       description: '',
+      subject: null,
     };
+
+    if (subject[0]) {
+      defaultTestData.subject = subject[0];
+    }
 
     return this.testModel.create(defaultTestData);
   }
