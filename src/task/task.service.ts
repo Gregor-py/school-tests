@@ -22,10 +22,12 @@ export class TaskService {
   async deleteAnswer(answerId: Types.ObjectId, taskId: Types.ObjectId) {
     const changingTask = await this.taskModel.findById(taskId);
 
-    changingTask.answerVariants.filter((answerVariant) => String(answerVariant) !== String(answerId));
-
+    const filteredVariants = changingTask.answerVariants.filter(
+      (answerVariant) => String(answerVariant) !== String(answerId),
+    );
     await this.answerService.deleteAnswer(answerId);
-    return changingTask.save();
+
+    return this.taskModel.findByIdAndUpdate(taskId, { answerVariants: filteredVariants });
   }
 
   async getById(taskId: Types.ObjectId) {
