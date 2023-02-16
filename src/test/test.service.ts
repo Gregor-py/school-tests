@@ -58,6 +58,15 @@ export class TestService {
       .exec();
   }
 
+  async deleteTask(taskId: Types.ObjectId, testId: Types.ObjectId) {
+    const changingTest = await this.testModel.findById(testId);
+
+    const filteredTasks = changingTest.tasks.filter((task) => String(task) !== String(taskId));
+    await this.taskService.deleteTask(taskId);
+
+    return this.testModel.findByIdAndUpdate(testId, { tasks: filteredTasks });
+  }
+
   async create(userId: Types.ObjectId) {
     const subject = await this.subjectService.getAll();
 

@@ -66,4 +66,11 @@ export class TestController {
   ) {
     return this.testService.changeSubject(user._id, testId, changeSubjectDto);
   }
+
+  @Auth()
+  @Creator('test')
+  @Put('/task-delete/:testId')
+  deleteAnswer(@Param('testId', IdValidationPipe) testId, @Body('taskId') taskId: Types.ObjectId) {
+    return this.testService.deleteTask(taskId, testId);
+  }
 }

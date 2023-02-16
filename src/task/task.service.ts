@@ -30,6 +30,10 @@ export class TaskService {
     return this.taskModel.findByIdAndUpdate(taskId, { answerVariants: filteredVariants });
   }
 
+  async deleteTask(taskId: Types.ObjectId) {
+    return this.taskModel.findByIdAndDelete(taskId);
+  }
+
   async getById(taskId: Types.ObjectId) {
     return this.taskModel.findById(taskId);
   }
