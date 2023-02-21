@@ -17,7 +17,7 @@ export class TestService {
   ) {}
 
   async getCreatedTestsByUser(userId: any) {
-    return this.testModel.find({ owner: userId });
+    return this.testModel.find({ owner: userId }).populate('subject');
   }
 
   async getTasks(testId: Types.ObjectId) {
