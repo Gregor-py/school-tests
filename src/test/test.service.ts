@@ -72,8 +72,8 @@ export class TestService {
 
     const defaultTestData = {
       owner: userId,
-      title: '',
-      description: '',
+      title: 'Новий тест',
+      description: 'Опис до тесту',
       subject: null,
     };
 

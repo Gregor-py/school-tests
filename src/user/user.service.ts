@@ -17,6 +17,10 @@ export class UserService {
     return this.userModel.create(createUserDto);
   }
 
+  async getCurrentUser(userId: Types.ObjectId) {
+    return this.userModel.findById(userId);
+  }
+
   async getAll(searchTerm = '', userClass?: number, region = ''): Promise<DocumentType<UserModel>[]> {
     const options: { $or: any[]; $and: any[] } = {
       $or: [

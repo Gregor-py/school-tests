@@ -16,6 +16,12 @@ export class UserController {
   constructor(private userService: UserService) {}
 
   @Auth()
+  @Get('/current')
+  getCurrentUser(@User() user: UserModel) {
+    return this.userService.getCurrentUser(user._id);
+  }
+
+  @Auth()
   @Put('/favorite-subjects')
   toggleFavoriteSubject(@User() user: UserModel, @Body('subjectId') subjectId: Types.ObjectId) {
     return this.userService.toggleFavorite(user, subjectId);
