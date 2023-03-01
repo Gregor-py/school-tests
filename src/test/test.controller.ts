@@ -21,7 +21,6 @@ export class TestController {
     return this.testService.getCreatedTestsByUser(user._id);
   }
 
-  @Auth()
   @Get('/:testId')
   getById(@Param('testId', IdValidationPipe) testId: Types.ObjectId) {
     return this.testService.getById(testId);
