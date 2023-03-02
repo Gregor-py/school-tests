@@ -31,7 +31,8 @@ export class PassingTestService {
   // todo create dto
   async startTest(testId: Types.ObjectId, userId: Types.ObjectId) {
     const passingTest = await this.create(testId, userId);
-    return this.userService.addToStartedTests(passingTest._id, userId);
+    await this.userService.addToStartedTests(passingTest._id, userId);
+    return passingTest._id;
   }
 
   async addPassedTask(addPassedTaskDto: AddPassedTaskDto) {
