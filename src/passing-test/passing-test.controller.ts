@@ -14,8 +14,8 @@ export class PassingTestController {
   constructor(private passingTestService: PassingTestService) {}
 
   @Auth()
-  @Post('/start')
-  startTest(@Body('testId') testId: Types.ObjectId, @User() user: UserModel) {
+  @Post('/start/:testId')
+  startTest(@Param('testId', IdValidationPipe) testId: Types.ObjectId, @User() user: UserModel) {
     return this.passingTestService.startTest(testId, user._id);
   }
 
