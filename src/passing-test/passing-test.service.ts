@@ -43,6 +43,10 @@ export class PassingTestService {
     return passingTest.save();
   }
 
+  async getById(passingTestId: Types.ObjectId) {
+    return this.passingTestModel.findById(passingTestId).populate('owner');
+  }
+
   private async create(testParent: Types.ObjectId, userId: Types.ObjectId) {
     const defaultPassingTest = {
       owner: userId,

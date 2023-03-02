@@ -13,6 +13,12 @@ import { ApiTags } from '@nestjs/swagger';
 export class PassingTestController {
   constructor(private passingTestService: PassingTestService) {}
 
+  //@Auth()
+  @Get('/:passingTestId')
+  getById(@Param('passingTestId', IdValidationPipe) passingTestId: Types.ObjectId) {
+    return this.passingTestService.getById(passingTestId);
+  }
+
   @Auth()
   @Post('/start/:testId')
   startTest(@Param('testId', IdValidationPipe) testId: Types.ObjectId, @User() user: UserModel) {
