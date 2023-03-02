@@ -13,7 +13,7 @@ import { ApiTags } from '@nestjs/swagger';
 export class PassingTestController {
   constructor(private passingTestService: PassingTestService) {}
 
-  //@Auth()
+  @Auth()
   @Get('/:passingTestId')
   getById(@Param('passingTestId', IdValidationPipe) passingTestId: Types.ObjectId) {
     return this.passingTestService.getById(passingTestId);
@@ -26,7 +26,7 @@ export class PassingTestController {
   }
 
   @Auth()
-  @Put('/add-to-tasks')
+  @Put('/passed-task')
   addPassedTask(@Body() addPassedTaskDto: AddPassedTaskDto) {
     return this.passingTestService.addPassedTask(addPassedTaskDto);
   }

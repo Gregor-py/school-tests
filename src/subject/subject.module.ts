@@ -19,4 +19,4 @@ import { SubjectModel } from './model/subject.model';
   providers: [SubjectService],
   controllers: [SubjectController],
 })
-export class SubjectModule { }
+export class SubjectModule {}

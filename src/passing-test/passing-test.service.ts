@@ -44,7 +44,7 @@ export class PassingTestService {
   }
 
   async getById(passingTestId: Types.ObjectId) {
-    return this.passingTestModel.findById(passingTestId).populate('owner');
+    return this.passingTestModel.findById(passingTestId).populate('owner').populate('testParent');
   }
 
   private async create(testParent: Types.ObjectId, userId: Types.ObjectId) {
