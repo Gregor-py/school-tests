@@ -23,7 +23,7 @@ export class PassingTestService {
     // eslint-disable-next-line @typescript-eslint/ban-ts-comment
     // @ts-ignore
     const passedTasksId = passingTest.passedTasks.map((passedTask) => String(passedTask.taskParent));
-    const allTasks = await this.testService.getTasks(passingTest.testParent._id);
+    const allTasks = await this.testService.getTasksPopulated(passingTest.testParent._id);
 
     return allTasks.filter((task) => !passedTasksId.includes(String(task)));
   }

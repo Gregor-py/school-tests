@@ -29,6 +29,21 @@ export class TestService {
     return test.tasks;
   }
 
+  async getTasksPopulated(testId: Types.ObjectId) {
+    const test = await this.testModel.findById(testId).populate({
+      path: 'tasks',
+      populate: {
+        path: 'answerVariants',
+        model: 'AnswerModel',
+      },
+    });
+    if (!test) {
+      throw new BadRequestException('Тест не знайдено');
+    }
+
+    return test.tasks;
+  }
+
   async getById(id: Types.ObjectId) {
     return this.testModel.findById(id).populate('subject');
   }
