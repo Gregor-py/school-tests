@@ -1,5 +1,8 @@
 import { Injectable } from '@nestjs/common';
 import { InjectModel } from 'nestjs-typegoose';
+import { count } from 'rxjs';
+import { log } from 'util';
+import { TaskService } from '../task/task.service';
 import { PassingTestModel } from './model/passing-test.model';
 import { ModelType } from '@typegoose/typegoose/lib/types';
 import { Types } from 'mongoose';
@@ -13,6 +16,7 @@ import { PassedTaskModel } from '../passed-task/model/passed-task.model';
 export class PassingTestService {
   constructor(
     @InjectModel(PassingTestModel) private passingTestModel: ModelType<PassingTestModel>,
+    private taskService: TaskService,
     private userService: UserService,
     private passedTaskService: PassedTaskService,
     private testService: TestService,
@@ -25,7 +29,11 @@ export class PassingTestService {
     const passedTasksId = passingTest.passedTasks.map((passedTask) => String(passedTask.taskParent));
     const allTasks = await this.testService.getTasksPopulated(passingTest.testParent._id);
 
-    return allTasks.filter((task) => !passedTasksId.includes(String(task)));
+    const filteredTasks = allTasks.filter((task) => {
+      return !Boolean(passedTasksId.find((passedTaskId) => passedTaskId === String(task._id)));
+    });
+
+    return filteredTasks;
   }
 
   // todo create dto
@@ -45,6 +53,28 @@ export class PassingTestService {
 
   async getById(passingTestId: Types.ObjectId) {
     return this.passingTestModel.findById(passingTestId).populate('owner').populate('testParent');
+  }
+
+  async finishTest(passingTestId: Types.ObjectId) {
+    const passingTest = await this.passingTestModel.findById(passingTestId).exec();
+    const passedTasks = passingTest.passedTasks;
+    let counterCorrectTasks = 0;
+
+    await Promise.all(
+      passedTasks.map(async (passedTaskId) => {
+        const passedTask = await this.passedTaskService.getById(passedTaskId._id);
+        const taskParent = await this.taskService.getById(passedTask.taskParent._id);
+
+        if (String(passedTask.chosenAnswer._id) === String(taskParent.correctAnswer._id)) {
+          counterCorrectTasks += 1;
+        }
+        return passedTask;
+      }),
+    );
+
+    const correctPercent = Math.round((counterCorrectTasks / passingTest.passedTasks.length) * 100);
+
+    return this.passingTestModel.findByIdAndUpdate(passingTestId, { isPassed: true, correctPercent: correctPercent });
   }
 
   private async create(testParent: Types.ObjectId, userId: Types.ObjectId) {

@@ -32,6 +32,12 @@ export class PassingTestController {
   }
 
   @Auth()
+  @Put('/finish/:passingTestId')
+  finishTest(@Param('passingTestId', IdValidationPipe) passingTestId: Types.ObjectId) {
+    return this.passingTestService.finishTest(passingTestId);
+  }
+
+  @Auth()
   @Get('/not-passed-tasks/:passingTestId')
   getNotPassedTasks(@Param('passingTestId', IdValidationPipe) passingTestId: Types.ObjectId) {
     return this.passingTestService.getNotPassedTasks(passingTestId);

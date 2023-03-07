@@ -11,4 +11,8 @@ export class PassedTaskService {
   async create(taskParent: Types.ObjectId, chosenAnswer: Types.ObjectId) {
     return this.passedTaskModel.create({ taskParent, chosenAnswer });
   }
+
+  async getById(passedTaskId: Types.ObjectId) {
+    return this.passedTaskModel.findById(passedTaskId);
+  }
 }

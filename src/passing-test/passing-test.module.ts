@@ -1,4 +1,7 @@
 import { Module } from '@nestjs/common';
+import { PassedTaskModel } from '../passed-task/model/passed-task.model';
+import { TaskModel } from '../task/model/task.model';
+import { TaskModule } from '../task/task.module';
 import { PassingTestService } from './passing-test.service';
 import { PassingTestController } from './passing-test.controller';
 import { UserModule } from '../user/user.module';
@@ -12,6 +15,7 @@ import { PassingTestModel } from './model/passing-test.model';
     UserModule,
     PassedTaskModule,
     TestModule,
+    TaskModule,
     TypegooseModule.forFeature([
       {
         typegooseClass: PassingTestModel,

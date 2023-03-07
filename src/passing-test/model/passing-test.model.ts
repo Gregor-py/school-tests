@@ -24,4 +24,8 @@ export class PassingTestModel extends TimeStamps {
   @prop()
   @ApiProperty({ default: false })
   isPassed: boolean;
+
+  @prop()
+  @ApiProperty()
+  correctPercent?: number;
 }
