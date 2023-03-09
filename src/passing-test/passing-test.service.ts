@@ -1,16 +1,13 @@
 import { Injectable } from '@nestjs/common';
-import { InjectModel } from 'nestjs-typegoose';
-import { count } from 'rxjs';
-import { log } from 'util';
-import { TaskService } from '../task/task.service';
-import { PassingTestModel } from './model/passing-test.model';
 import { ModelType } from '@typegoose/typegoose/lib/types';
 import { Types } from 'mongoose';
+import { InjectModel } from 'nestjs-typegoose';
+import { PassedTaskService } from '../passed-task/passed-task.service';
+import { TaskService } from '../task/task.service';
+import { TestService } from '../test/test.service';
 import { UserService } from '../user/user.service';
 import { AddPassedTaskDto } from './dto/add-passed-task.dto';
-import { PassedTaskService } from '../passed-task/passed-task.service';
-import { TestService } from '../test/test.service';
-import { PassedTaskModel } from '../passed-task/model/passed-task.model';
+import { PassingTestModel } from './model/passing-test.model';
 
 @Injectable()
 export class PassingTestService {
@@ -24,16 +21,15 @@ export class PassingTestService {
 
   async getNotPassedTasks(passingTestId: Types.ObjectId) {
     const passingTest = await this.passingTestModel.findById(passingTestId).populate('passedTasks').exec();
+
     // eslint-disable-next-line @typescript-eslint/ban-ts-comment
     // @ts-ignore
-    const passedTasksId = passingTest.passedTasks.map((passedTask) => String(passedTask.taskParent));
+    const passedTasksId = passingTest.passedTasks.map((passedTask) => String(passedTask.taskParent._id));
     const allTasks = await this.testService.getTasksPopulated(passingTest.testParent._id);
 
-    const filteredTasks = allTasks.filter((task) => {
+    return allTasks.filter((task) => {
       return !Boolean(passedTasksId.find((passedTaskId) => passedTaskId === String(task._id)));
     });
-
-    return filteredTasks;
   }
 
   // todo create dto

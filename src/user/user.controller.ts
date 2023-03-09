@@ -22,6 +22,12 @@ export class UserController {
   }
 
   @Auth()
+  @Get('/started-tests')
+  getStartedTests(@User() user: UserModel) {
+    return this.userService.getStartedTests(user._id);
+  }
+
+  @Auth()
   @Put('/favorite-subjects')
   toggleFavoriteSubject(@User() user: UserModel, @Body('subjectId') subjectId: Types.ObjectId) {
     return this.userService.toggleFavorite(user, subjectId);

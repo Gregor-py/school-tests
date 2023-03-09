@@ -89,6 +89,21 @@ export class UserService {
       });
   }
 
+  async getStartedTests(userId: Types.ObjectId) {
+    return this.userModel
+      .findById(userId)
+      .populate({
+        path: 'startedTests',
+        populate: {
+          path: 'testParent',
+          populate: {
+            path: 'subject',
+          },
+        },
+      })
+      .then((data) => data.startedTests);
+  }
+
   async addToStartedTests(startedTest: Types.ObjectId, userId: Types.ObjectId) {
     const user = await this.userModel.findById(userId);
     if (!user) {
