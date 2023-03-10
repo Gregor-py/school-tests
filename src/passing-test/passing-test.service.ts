@@ -61,7 +61,7 @@ export class PassingTestService {
         const passedTask = await this.passedTaskService.getById(passedTaskId._id);
         const taskParent = await this.taskService.getById(passedTask.taskParent._id);
 
-        if (String(passedTask.chosenAnswer._id) === String(taskParent.correctAnswer._id)) {
+        if (String(passedTask.chosenAnswer._id) === String(taskParent?.correctAnswer?._id)) {
           counterCorrectTasks += 1;
         }
         return passedTask;
